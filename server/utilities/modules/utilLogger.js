@@ -56,8 +56,9 @@ function requestRest(req, handlerName, payload) {
 
   case 'sentence':
   default:
+    const prefixString = `[${logData.requestId}] -> ${logData.ip}/${logData.hostname} -> ${logData.url} -> ${logData.method}`;
     const payloadString = (logData.payload ? ` payload --> ${JSON.stringify(logData.payload)}` : '');
-    main.info(`[${logData.requestId}] -> ${logData.ip}/${logData.hostname} -> ${logData.url} -> ${logData.method} -> request-${logData.request}.${payloadString}`);
+    main.info(`${prefixString} -> request-${logData.request}.${payloadString}`);
   }
 }
 

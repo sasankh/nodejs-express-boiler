@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require(`${global.__base}/server/config/config`);
 
 const {
+  crypt,
   logger,
   response
 } = require(`${global.__base}/server/utilities`);
@@ -15,15 +16,20 @@ function authenticateToken(requestId, token) {
   return new Promise((resolve, reject) => {
     if (token) {
       logger.debug(requestId, `token is: ${token}`);
-      jwt.verify(token, config.jwt.cert, (err, decoded) => {
+      jwt.verify(token, config.jwt.secret, (err, decoded) => {
         if (err) {
           logger.debug(requestId, `Failed to authenticate token - ${err.name}`, err);
           reject({ code: 102, message: { message: 'Failed to authenticate token' } });
         } else {
+          const decryptedData = crypt.decrypt(decoded.data);
           const authInfo = {
             token,
             tokenData: decoded,
-            roles: decoded.roles,
+            decryptedData,
+            username: decryptedData.username,
+            roles: decryptedData.roles,
+            token_request_ip: decryptedData.token_request_ip,
+            token_request_hostname: decryptedData.token_request_hostname,
             exp: decoded.exp,
             iat: decoded.iat
           };

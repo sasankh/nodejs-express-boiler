@@ -3,7 +3,8 @@
 const routes = {
   home: '/',
   basicHealthCheck: '/api/health',
-  deepHealthCheck: '/api/health/deep'
+  deepHealthCheck: '/api/health/deep',
+  login: '/api/login'
 };
 
 module.exports = routes;
