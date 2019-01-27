@@ -69,7 +69,7 @@ module.exports.authCheck = async (req, res, next) => {
     const authInfo = await authenticateToken(req.requestId, token);
     const authorizedEndpointRoles = await endpointAuthorization(req.requestId, req.method, req.route.path, authInfo);
 
-    logger.debug(req.requestId, `User: ${authInfo.customer_id} successfully authorized.`);
+    logger.debug(req.requestId, `User: ${authInfo.username} successfully authorized.`);
     authInfo.authorizedEndpointRoles = authorizedEndpointRoles;
     req.authInfo = authInfo;
 
