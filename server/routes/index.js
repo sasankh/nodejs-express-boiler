@@ -1,8 +1,7 @@
 'use strict';
 
-const health = require(`${global.__base}/server/handlers/health`);
+const apis = require(`${global.__base}/server/routes/api`);
 
-module.exports = {
-  basicHealthCheck: health.basicHealthCheck,
-  deepHealthCheck: health.deepHealthCheck
+module.exports = (app) => {
+  apis(app);
 };

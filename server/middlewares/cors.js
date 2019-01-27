@@ -1,20 +1,11 @@
 'use strict';
 
-const cuid = require('cuid');
 const cors = require('cors');
 const asyncLib = require('async');
 
 const {
   logger
 } = require(`${global.__base}/server/utilities/index`);
-
-// middleware function for requestId
-module.exports.addRequestId = () => {
-  return (req, res, next) => {
-    req.requestId = cuid();
-    next();
-  };
-};
 
 module.exports.cors = (allowedOrigins) => {
   const options = {
@@ -34,10 +25,10 @@ module.exports.cors = (allowedOrigins) => {
   if (allowedOrigins && allowedOrigins.constructor === Array) {
     options.origin = allowedOrigins;
     return cors(options);
-  } else {
-    return cors();
   }
-}
+
+  return cors();
+};
 
 module.exports.accessControlAllow = (allowedOrigins) => {
   return (req, res, next) => {

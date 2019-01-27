@@ -13,7 +13,7 @@ function log(data) {
   main.log(data);
 }
 
-function rpcRequest(requestId, handlerName, payload) {
+function request(requestId, handlerName, payload) {
   const logData = {
     requestId,
     request: handlerName
@@ -32,6 +32,32 @@ function rpcRequest(requestId, handlerName, payload) {
   default:
     const payloadString = (logData.payload ? ` payload --> ${JSON.stringify(logData.payload)}` : '');
     main.info(`[${logData.requestId}] -> request-${logData.request}.${payloadString}`);
+  }
+}
+
+function requestRest(req, handlerName, payload) {
+  const logData = {
+    requestId: req.requestId,
+    ip: req.ip,
+    hostname: req.hostname,
+    url: req.url,
+    method: req.method,
+    request: handlerName
+  };
+
+  if (['login', 'authentication'].indexOf(handlerName) === -1) {
+    logData.payload = payload;
+  }
+
+  switch (logFormat) {
+  case 'json':
+    main.info(JSON.stringify(logData));
+    break;
+
+  case 'sentence':
+  default:
+    const payloadString = (logData.payload ? ` payload --> ${JSON.stringify(logData.payload)}` : '');
+    main.info(`[${logData.requestId}] -> ${logData.ip}/${logData.hostname} -> ${logData.url} -> ${logData.method} -> request-${logData.request}.${payloadString}`);
   }
 }
 
@@ -104,7 +130,8 @@ module.exports = {
   main,
   health,
   log,
-  rpcRequest,
+  request,
+  requestRest,
   error: loggers.error.write,
   warn: loggers.warn.write,
   info: loggers.info.write,

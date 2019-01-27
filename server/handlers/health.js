@@ -1,27 +1,35 @@
 'use strict';
 
-const cuid = require('cuid');
+const config = require(`${global.__base}/server/config/config`);
 
 const {
-  logger
+  logger,
+  response
 } = require(`${global.__base}/server/utilities`);
 
-module.exports.basicHealthCheck = (call, callback) => {
-  const requestId = cuid();
+module.exports.home = (req, res) => {
+  logger.requestRest(req, 'home', req.body);
 
-  logger.rpcRequest(requestId, 'basicHealthCheck', call.request);
-  callback(null, {
+  response.success(req.requestId, {
     service: true,
-    message: 'This is basic health check response'
-  });
+    message: config.app.applicationService
+  }, res);
 };
 
-module.exports.deepHealthCheck = (call, callback) => {
-  const requestId = cuid();
+module.exports.basicHealthCheck = (req, res) => {
+  logger.requestRest(req, 'basicHealthCheck', req.body);
 
-  logger.rpcRequest(requestId, 'deepHealthCheck', call.request);
-  callback(null, {
+  response.success(req.requestId, {
+    service: true,
+    message: 'This is basic health check response'
+  }, res);
+};
+
+module.exports.deepHealthCheck = (req, res) => {
+  logger.requestRest(req, 'deepHealthCheck', req.body);
+
+  response.success(req.requestId, {
     service: true,
     message: 'This is deep health check response'
-  });
+  }, res);
 };

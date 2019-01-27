@@ -18,12 +18,14 @@ const config = require(`${global.__base}/server/config/config`);
 const {
   addRequestId,
   parseAccessOrigin,
-  cors,
-  accessControlAllow
-} = require(`${global.__base}/server/init/middlewares`);
+  cors
+} = require(`${global.__base}/server/middlewares`);
+
 const {
   logger
-} = require(`${global.__base}/server/utilities/index`);
+} = require(`${global.__base}/server/utilities`);
+
+const apis = require(`${global.__base}/server/routes/api`);
 
 let server;
 
@@ -45,6 +47,9 @@ async function initialize() {
 
     const allowedOrigins = await parseAccessOrigin(config.app.accessOrigins);
     app.use(cors(allowedOrigins));
+
+    // routes
+    apis(app);
 
     server = app.listen(app.get('port'), () => {
       logger.info('SERVICE', `Service is initialized at port ${app.get('port')}`);
