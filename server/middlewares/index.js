@@ -10,9 +10,16 @@ const {
   accessControlAllow
 } = require('./cors');
 
+const {
+  zipkinMiddleware,
+  zipkinMiddleware2
+} = require('./zipkin');
+
 module.exports = {
   addRequestId,
   parseAccessOrigin,
   cors,
-  accessControlAllow
+  accessControlAllow,
+  zipkinMiddleware,
+  zipkinMiddleware2
 };

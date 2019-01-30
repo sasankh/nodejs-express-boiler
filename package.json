@@ -40,7 +40,11 @@
     "simple-encryptor": "^2.0.0",
     "validator": "^10.11.0",
     "winston": "^3.1.0",
-    "winston-daily-rotate-file": "^3.5.1"
+    "winston-daily-rotate-file": "^3.5.1",
+    "zipkin": "^0.16.0",
+    "zipkin-context-cls": "^0.16.0",
+    "zipkin-instrumentation-express": "^0.16.0",
+    "zipkin-transport-http": "^0.16.0"
   },
   "devDependencies": {
     "eslint": "^5.10.0",
