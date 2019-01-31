@@ -27,6 +27,11 @@ exports.jwt = {
   expiresIn: process.env.JWT_EXPIRATION || '2 days'
 };
 
+exports.zipkin = {
+  recorderType: process.env.ZIPKIN_RECORDER_TYPE || 'console', // 'console', 'http'
+  remoteHttp: process.env.ZIPKIN_REMOTE_HTTP
+}
+
 // Credentials, api_key, etc of other services
 exports.credentials = {};
 

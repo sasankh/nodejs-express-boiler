@@ -11,8 +11,7 @@ const {
 } = require('./cors');
 
 const {
-  zipkinMiddleware,
-  zipkinMiddleware2
+  zipkinMiddleware
 } = require('./zipkin');
 
 module.exports = {
@@ -20,6 +19,5 @@ module.exports = {
   parseAccessOrigin,
   cors,
   accessControlAllow,
-  zipkinMiddleware,
-  zipkinMiddleware2
+  zipkinMiddleware
 };
