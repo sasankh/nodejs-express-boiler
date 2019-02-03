@@ -3,10 +3,10 @@
 const request = require('request');
 
 const config = require(`${global.__base}/server/config/config`);
-const wrapRequest = require(`${global.__base}/server/init/zipkin/zipkin-instrumentation-request`);
+const wrapRequest = require(`${global.__base}/server/lib/zipkin/zipkin-instrumentation-request`);
 const {
   getZipkinTracer
-} = require(`${global.__base}/server/init/zipkin/zipkin-setup`);
+} = require(`${global.__base}/server/lib/zipkin/zipkin-setup`);
 
 module.exports = (remoteServiceName) => {
   const tracer = getZipkinTracer(
