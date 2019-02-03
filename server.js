@@ -15,16 +15,18 @@ const compression = require('compression');
 
 const config = require(`${global.__base}/server/config/config`);
 
+require(`${global.__base}/server/utilities`);
+
+const {
+  logger
+} = require(`${global.__base}/server/utilities`);
+
 const {
   addRequestId,
   parseAccessOrigin,
   cors,
   zipkinMiddleware
 } = require(`${global.__base}/server/middlewares`);
-
-const {
-  logger
-} = require(`${global.__base}/server/utilities`);
 
 const apis = require(`${global.__base}/server/routes/api`);
 

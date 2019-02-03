@@ -11,9 +11,7 @@ const {
 const CLSContext = require('zipkin-context-cls');
 const { HttpLogger } = require('zipkin-transport-http');
 
-const {
-  logger
-} = require(`${global.__base}/server/utilities`);
+const logger = require(`${global.__base}/server/utilities/modules/utilLogger`); // need todo direct to modules
 
 function zipkinConsoleTracer(serviceName) {
   logger.info('SERVICE', 'Initializing zipkin local console tracer');

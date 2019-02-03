@@ -11,6 +11,7 @@ const authorization = require(`${global.__base}/server/routes/config/authorizati
 // Handlersandlers
 const health = require(`${global.__base}/server/handlers/health`);
 const registration = require(`${global.__base}/server/handlers/registration`);
+const external = require(`${global.__base}/server/handlers/external`);
 
 module.exports = (app) => {
   // health checks
@@ -19,6 +20,9 @@ module.exports = (app) => {
   app.get(route.deepHealthCheck, authorization.authCheck, health.deepHealthCheck);
 
   app.post(route.login, registration.login);
+
+  // this is  for request test
+  app.get(route.requestGoogle, external.requestGoogle);
 
   logger.info('SERVICE', 'Routes initialized.');
 };
