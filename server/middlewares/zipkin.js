@@ -4,7 +4,7 @@ const zipkinMiddleware = require('zipkin-instrumentation-express').expressMiddle
 
 const {
   getZipkinTracer
-} = require(`${global.__base}/server/init/zipkin`);
+} = require(`${global.__base}/server/init/zipkin/zipkin-setup`);
 
 module.exports.zipkinMiddleware = (type, localServiceName, endpoint) => {
   const tracer = getZipkinTracer(type, localServiceName, endpoint);

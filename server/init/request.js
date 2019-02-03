@@ -1,23 +1,19 @@
 'use strict';
 
 const request = require('request');
-const wrapRequest = require('zipkin-instrumentation-request');
 
 const config = require(`${global.__base}/server/config/config`);
-
+const wrapRequest = require(`${global.__base}/server/init/zipkin/zipkin-instrumentation-request`);
 const {
   getZipkinTracer
-} = require(`${global.__base}/server/init/zipkin`);
+} = require(`${global.__base}/server/init/zipkin/zipkin-setup`);
 
-const zipkinTracer = getZipkinTracer(
-  config.zipkin.recorderType,
-  config.app.applicationService,
-  config.zipkin.remoteHttp
-);
+module.exports = (remoteServiceName) => {
+  const tracer = getZipkinTracer(
+    config.zipkin.recorderType,
+    config.app.applicationService,
+    config.zipkin.remoteHttp
+  );
 
-module.exports.getRequest = (remoteServiceName) => {
-  return wrapRequest(request, {
-    tracer: zipkinTracer,
-    remoteServiceName
-  });
+  return wrapRequest(request, tracer, remoteServiceName);
 };

@@ -2,11 +2,9 @@
 
 const logger = require(`${global.__base}/server/utilities/modules/utilLogger`);
 
-const {
-  getRequest
-} = require(`${global.__base}/server/init/request`);
+const request = require(`${global.__base}/server/init/request`);
 
-module.exports.request = (requestId, options) => {
+module.exports = (requestId, options) => {
   return new Promise((resolve, reject) => {
     try {
       logger.debug(requestId, 'Request', options);
@@ -23,7 +21,7 @@ module.exports.request = (requestId, options) => {
         }
       }
 
-      getRequest(remoteService)(options, (err, response, body) => {
+      request(remoteService)(options, (err, response, body) => {
         if (err) {
           logger.error(requestId, 'Request-Error. Unable to make request to remote service', err);
           reject({
