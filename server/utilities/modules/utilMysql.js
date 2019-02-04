@@ -3,6 +3,7 @@
 const logger = require(`${global.__base}/server/utilities/modules/utilLogger`);
 
 const {
+  mysql,
   dbs,
   dbList,
   addConnectionTracer
@@ -181,10 +182,12 @@ function performQuery(requestId, database, query, values, log) {
 }
 
 module.exports = {
+  mysql,
   getPool,
   getConnection,
   beginTransaction,
   commit,
   rollback,
-  query: performQuery
+  query: performQuery,
+  addConnectionTracer
 };

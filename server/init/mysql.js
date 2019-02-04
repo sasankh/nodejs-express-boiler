@@ -44,6 +44,7 @@ if (dbList.length > 0) {
 dbList = Object.keys(dbs);
 
 module.exports = {
+  mysql,
   dbs,
   dbList,
   zipkinTracer: tracer,
