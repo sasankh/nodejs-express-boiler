@@ -137,28 +137,54 @@ function rollback(requestId, connection) {
   });
 }
 
-// function query(requestId, database, query, values, log) {
-//   return new Promise(async (resolve, reject) {
-//     try {
-//       let db = database;
-//
-//       if (typeof db === 'string' && dbList.indexOf(db.trim()) > -1) {
-//         db = await getConnection(requestId, database.trim());
-//       } else if (typeof )
-//     } catch (e) {
-//       logger.error(requestId, 'Mysql-Query-Error', e);
-//       reject({
-//         code: 102,
-//         message: 'An exception occured during mysql query'
-//       });
-//     }
-//   });
-// }
+function performQuery(requestId, database, query, values, log) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let connection = database;
+
+      if (typeof database === 'string' && dbList.indexOf(database.trim()) > -1) {
+        connection = await getConnection(requestId, database.trim());
+      }
+
+      if (log !== false) {
+        logger.info(requestId, `${connection.config.database} - query`, {
+          query,
+          values
+        });
+      }
+
+      connection.query({
+        sql: query
+      }, values, (err, results, fields) => {
+        if (typeof database === 'string') {
+          connection.release();
+        }
+
+        if (err) {
+          logger.error(requestId, 'Mysql-Error. Problem performing mysql query', err);
+          reject({
+            code: 102,
+            message: 'Problem performing mysql query'
+          });
+        } else {
+          resolve({ results, fields });
+        }
+      });
+    } catch (e) {
+      logger.error(requestId, 'Mysql-Query-Error', e);
+      reject({
+        code: 102,
+        message: 'An exception occured during mysql query'
+      });
+    }
+  });
+}
 
 module.exports = {
   getPool,
   getConnection,
   beginTransaction,
   commit,
-  rollback
+  rollback,
+  query: performQuery
 };
