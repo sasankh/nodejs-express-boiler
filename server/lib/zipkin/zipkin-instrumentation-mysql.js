@@ -15,7 +15,7 @@ function createMysqlTracer(config, tracer, Connection, serviceName, remoteServic
         host: new InetAddress(config.host),
         port: config.port
       }));
-      tracer.recordRpc(`query ${config.database}`);
+      tracer.recordRpc(`Query-DB-${config.database}`);
     });
 
     const promise = originalFn.call(this, sql, values, callback);
@@ -39,6 +39,10 @@ function createMysqlTracer(config, tracer, Connection, serviceName, remoteServic
   return Connection;
 }
 
+function addTracerToConnection(tracer, Connection) {
+  return createMysqlTracer(Connection.config, tracer, Connection, tracer.localEndpoint.serviceName, `mysql-${Connection.config.database}`);
+}
+
 function getZipkinMysql(Mysql, tracer) {
   const ZipkinMysql = Object.assign({}, Mysql, {
     createConnection(config) {
@@ -56,4 +60,7 @@ function getZipkinMysql(Mysql, tracer) {
   return ZipkinMysql;
 }
 
-module.exports = getZipkinMysql;
+module.exports = {
+  wrapMysql: getZipkinMysql,
+  addTracerToConnection
+};

@@ -23,6 +23,7 @@ module.exports = (app) => {
 
   // this is  for request test
   app.get(route.requestGoogle, external.requestGoogle);
+  app.get(route.testMysql, external.testMysql);
 
   logger.info('SERVICE', 'Routes initialized.');
 };
