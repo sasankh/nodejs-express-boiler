@@ -25,24 +25,25 @@ AddUser.prototype.bodyValidation = function () {
       logger.debug(this.requestId, 'bodyValidation');
 
       const schema = Joi.object().keys({
-        username: Joi.string().min(3).required(),
-        //password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),  // *** use for live
-        password: Joi.string().min(8).required(),  // *** use of test
-        email: Joi.string().email({ minDomainAtoms: 2 }),
-        full_name: Joi.string().min(3).required(),
+        username: Joi.string().min(3).trim().required(),
+        //password: Joi.string().trim().regex(/^[a-zA-Z0-9]{3,30}$/).required(),  // *** use for live
+        password: Joi.string().min(8).trim().required(),  // *** use of test
+        email: Joi.string().email({ minDomainAtoms: 2 }).trim(),
+        full_name: Joi.string().min(3).trim().required(),
         phone: Joi.number().min(6)
       })
       .with('username', 'password')
       .with('password', 'email',)
       .with('email', 'full_name');
 
-      Joi.validate(this.body, schema, (err) => {
+      Joi.validate(this.body, schema, (err, value) => {
         if (err) {
           reject({
             code: 103,
             message: 'Missing or invalid required parameter'
           });
         } else {
+          this.body = value;
           resolve();
         }
       });
@@ -95,7 +96,7 @@ AddUser.prototype.insertNewUser = function () {
         password_salt,
         email: this.body.email.trim(),
         full_name: this.body.full_name.trim(),
-        phone: (this.body.phone ? this.body.phone.trim() : ''),
+        phone: (this.body.phone ? this.body.phone : null),
         created_by: 'NEED_TO_CHANGE', // *** update later to username from jwt token
         status: 'ACTIVE',
         reset_password: true
@@ -122,7 +123,7 @@ AddUser.prototype.responseBody = function (userStatus, requirePwdReset) {
       username: this.body.username.trim(),
       email: this.body.email.trim(),
       full_name: this.body.full_name.trim(),
-      phone: this.body.phone.trim(),
+      phone: this.body.phone,
       user_status: userStatus,
       require_pwd_reset: requirePwdReset
     };

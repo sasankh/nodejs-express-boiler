@@ -9,7 +9,8 @@ const routes = {
   testMysql: '/api/mysql', // this is for mysql test
 
   // user management
-  addUser: '/api/user/add'
+  addUser: '/api/users/add',
+  userList: '/api/users/list'
 
   // role management
 

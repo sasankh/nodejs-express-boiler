@@ -181,6 +181,10 @@ function performQuery(requestId, database, query, values, log) {
   });
 }
 
+function escape(value) {
+  return mysql.escape(String(value));
+}
+
 module.exports = {
   mysql,
   getPool,
@@ -189,5 +193,6 @@ module.exports = {
   commit,
   rollback,
   query: performQuery,
-  addConnectionTracer
+  addConnectionTracer,
+  escape
 };

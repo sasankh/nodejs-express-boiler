@@ -12,6 +12,7 @@ const authorization = require(`${global.__base}/server/routes/config/authorizati
 const health = require(`${global.__base}/server/handlers/health`);
 const registration = require(`${global.__base}/server/handlers/registration`);
 const external = require(`${global.__base}/server/handlers/external`);
+const users = require(`${global.__base}/server/handlers/users`);
 
 module.exports = (app) => {
   // health checks
@@ -26,7 +27,8 @@ module.exports = (app) => {
   app.get(route.testMysql, external.testMysql);
 
   // user management
-  app.post(route.addUser, registration.addUser);
+  app.post(route.addUser, users.addUser);
+  app.get(route.userList, users.getUserList);
 
   // role management
 
