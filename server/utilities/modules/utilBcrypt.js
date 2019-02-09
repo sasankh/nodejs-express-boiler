@@ -56,8 +56,26 @@ function generateSaltAndHash(requestId, saltRounds, textToHash) {
   });
 };
 
+function compare(requestId, textToCompare, hash) {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(textToCompare, hash, (err, result) => {
+      if (err) {
+        logger.error(requestId, 'Problem with bcrypt compare', err);
+
+        reject({
+          code: 102,
+          message: 'Problem with bcrypt compare'
+        });
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
 module.exports = {
   generateSalt,
   hash,
-  generateSaltAndHash
+  generateSaltAndHash,
+  compare
 }

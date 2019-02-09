@@ -10,7 +10,8 @@ const routes = {
 
   // user management
   addUser: '/api/users/add',
-  userList: '/api/users/list'
+  userList: '/api/users/list',
+  resetPassword: '/api/users/password/reset'
 
   // role management
 

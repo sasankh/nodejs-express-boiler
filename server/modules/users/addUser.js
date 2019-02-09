@@ -59,7 +59,7 @@ AddUser.prototype.checkIfExistingUser = function () {
       logger.debug(this.requestId, 'checkIfExistingUser');
 
       const query = 'SELECT username, email FROM users where username = ? OR email = ?';
-      const post = [this.body.username.trim(), this.body.email.trim()];
+      const post = [this.body.username, this.body.email];
       const { results } = await mysql.query(this.requestId, 'internal', query, post);
 
       if (results.length > 0) {
@@ -86,16 +86,16 @@ AddUser.prototype.insertNewUser = function () {
       const {
         salt: password_salt,
         hash: password_hash
-      } = await bcrypt.generateSaltAndHash(this.requestId, 10, this.body.password.trim());
+      } = await bcrypt.generateSaltAndHash(this.requestId, 10, this.body.password);
 
       const query = 'INSERT INTO users SET ?';
       const post = {
         user_id,
-        username: this.body.username.trim(),
+        username: this.body.username,
         password_hash,
         password_salt,
-        email: this.body.email.trim(),
-        full_name: this.body.full_name.trim(),
+        email: this.body.email,
+        full_name: this.body.full_name,
         phone: (this.body.phone ? this.body.phone : null),
         created_by: 'NEED_TO_CHANGE', // *** update later to username from jwt token
         status: 'ACTIVE',
@@ -120,9 +120,9 @@ AddUser.prototype.responseBody = function (userStatus, requirePwdReset) {
     logger.debug(this.requestId, 'responseBody');
 
     const responseBody = {
-      username: this.body.username.trim(),
-      email: this.body.email.trim(),
-      full_name: this.body.full_name.trim(),
+      username: this.body.username,
+      email: this.body.email,
+      full_name: this.body.full_name,
       phone: this.body.phone,
       user_status: userStatus,
       require_pwd_reset: requirePwdReset
