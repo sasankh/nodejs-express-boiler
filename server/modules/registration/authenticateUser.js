@@ -48,7 +48,7 @@ AuthenticateUser.prototype.getUserData = function () {
     try {
       logger.debug(this.requestId, 'getUserData');
 
-      const query = 'SELECT u.username, u.email, u.phone, u.password_hash, u.password_salt FROM users u WHERE u.username = ?';
+      const query = 'SELECT u.username, u.email, u.phone, u.password_hash, u.password_salt, u.status FROM users u WHERE u.username = ?';
       const post = [this.body.username];
 
       const { results } = await mysql.query(this.requestId, 'internal', query, post);
@@ -74,21 +74,21 @@ AuthenticateUser.prototype.getUserData = function () {
   });
 };
 
-AuthenticateUser.prototype.authenticateUser = function (password_hash) {
+AuthenticateUser.prototype.authenticateUser = function (password_hash, userStatus) {
   return new Promise(async (resolve, reject) => {
     try {
       logger.debug(this.requestId, 'authenticateUser');
 
-      const authenticated = await bcrypt.compare(this.requestId, this.body.password, password_hash);
+      if (userStatus === 'ACTIVE') {
+        const authenticated = await bcrypt.compare(this.requestId, this.body.password, password_hash);
 
-      if (authenticated === true) {
-        resolve(authenticated);
+        if (authenticated === true) {
+          resolve(authenticated)
+        } else {
+          resolve(false);
+        }
       } else {
-        reject({
-          code: 101,
-          custom_message: 'Invalid password',
-          level: 'debug'
-        });
+        resolve(false);
       }
     } catch (e) {
       reject(e);
@@ -96,14 +96,15 @@ AuthenticateUser.prototype.authenticateUser = function (password_hash) {
   });
 };
 
-AuthenticateUser.prototype.responseBody = function (authenticated, email) {
+AuthenticateUser.prototype.responseBody = function (authenticated, userStatus, email) {
   return new Promise((resolve) => {
     logger.debug(this.requestId, 'responseBody');
 
     const responseBody = {
       username: this.body.username,
       email,
-      authenticated
+      authenticated,
+      status: userStatus
     };
 
     resolve(responseBody);

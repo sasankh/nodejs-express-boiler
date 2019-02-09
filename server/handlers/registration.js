@@ -32,9 +32,9 @@ module.exports.authenticateUser = async (req, res) => {
     const authenticateUser = new AuthenticateUser(req.requestId, req.body);
 
     await authenticateUser.bodyValidation();
-    const { password_hash, email } = await authenticateUser.getUserData();
-    const authenticated = await authenticateUser.authenticateUser(password_hash);
-    const responseBody = await authenticateUser.responseBody(authenticated, email);
+    const { password_hash, email, status: userStatus } = await authenticateUser.getUserData();
+    const authenticated = await authenticateUser.authenticateUser(password_hash, userStatus);
+    const responseBody = await authenticateUser.responseBody(authenticated, userStatus, email);
 
     response.success(req.requestId, responseBody, res);
   } catch (e) {
