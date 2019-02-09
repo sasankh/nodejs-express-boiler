@@ -20,11 +20,13 @@ module.exports = (app) => {
   app.get(route.basicHealthCheck, health.basicHealthCheck);
   app.get(route.deepHealthCheck, authorization.authCheck, health.deepHealthCheck);
 
-  app.post(route.login, registration.login);
-
   // this is  for request test
   app.get(route.requestGoogle, external.requestGoogle);
   app.get(route.testMysql, external.testMysql);
+
+  // regiustration
+  app.post(route.login, registration.login);
+  app.post(route.authenticateUser, registration.authenticateUser);
 
   // user management
   app.post(route.addUser, users.addUser);

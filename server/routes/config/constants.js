@@ -11,7 +11,8 @@ const routes = {
   // user management
   addUser: '/api/users/add',
   userList: '/api/users/list',
-  resetPassword: '/api/users/password/reset'
+  resetPassword: '/api/users/password/reset',
+  authenticateUser: '/api/users/authenticate'
 
   // role management
 
