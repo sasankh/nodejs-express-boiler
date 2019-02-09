@@ -35,13 +35,13 @@ exports.zipkin = {
 // all mysql connections
 exports.mysql = {
   // relace with db name {replaceWithDbName} AND {REPLACE_WITH_DB_NAME} PORTIONS
-  replaceWithDbName: {
-    host: process.env.REPLACE_WITH_DB_NAME_MYSQL_HOST,
-    user: process.env.REPLACE_WITH_DB_NAME_MYSQL_USER,
-    password: process.env.REPLACE_WITH_DB_NAME_MYSQL_PASS,
-    database: process.env.REPLACE_WITH_DB_NAME_MYSQL_DB,
-    port: process.env.REPLACE_WITH_DB_NAME_MYSQL_PORT,
-    connectionLimit: parseInt(process.env.REPLACE_WITH_DB_NAME_MAX_MYSQL_CONNECTION, 10) || 6,
+  internal: {
+    host: process.env.INTERNAL_MYSQL_HOST,
+    user: process.env.INTERNAL_MYSQL_USER,
+    password: process.env.INTERNAL_MYSQL_PASS,
+    database: process.env.INTERNAL_MYSQL_DB,
+    port: process.env.INTERNAL_MYSQL_PORT,
+    connectionLimit: parseInt(process.env.INTERNAL_MAX_MYSQL_CONNECTION, 10) || 6,
     waitForConnections: true
   }
 };

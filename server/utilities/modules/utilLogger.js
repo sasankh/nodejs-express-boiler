@@ -105,25 +105,36 @@ const loggers = {
 };
 
 function logManager(requestId, body) {
-  loggers[body.level].write(requestId, body.message, body.details);
+  let level = 'error';
+  let message;
+
+  if (body) {
+    if (body.level) {
+      level = body.level;
+    }
+
+    if (body.custom_message) {
+      message = body.custom_message;
+    }
+
+    if (body.message) {
+      message = body.message;
+    }
+
+    loggers[level].write(requestId, message, body.details);
+  }
 }
 
 function logReject(requestId, body) {
-  if (body.error) {
-    logManager(requestId, body.error);
+  if (body) {
+    logManager(requestId, body);
   } else {
-    const newBody = {
-      error: {
-        level: 'error',
-        message: 'Exception',
-        details: {
-          message: body.message,
-          stack: body.stack
-        }
-      }
-    };
+    const body = {
+      level: 'warn',
+      message: `Exception. Reject log without a body. Please, pass reject body to log_reject. RequestId: ${requestId}`
+    }
 
-    logManager(requestId, newBody.error);
+    logManager(requestId, body);
   }
 }
 

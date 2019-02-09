@@ -25,5 +25,12 @@ module.exports = (app) => {
   app.get(route.requestGoogle, external.requestGoogle);
   app.get(route.testMysql, external.testMysql);
 
+  // user management
+  app.post(route.addUser, registration.addUser);
+
+  // role management
+
+  // application management
+
   logger.info('SERVICE', 'Routes initialized.');
 };
