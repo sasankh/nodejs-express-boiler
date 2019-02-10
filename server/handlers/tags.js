@@ -10,7 +10,7 @@ const {
 } = require(`${global.__base}/server/config/tags.dataFile`);
 
 const AddTag = require(`${global.__base}/server/modules/tags/addTag`);
-// const ChangeApplicationStatus = require(`${global.__base}/server/modules/tags/changeApplicationStatus`);
+const ChangeTagStatus = require(`${global.__base}/server/modules/tags/changeTagStatus`);
 // const GetApplicationList = require(`${global.__base}/server/modules/tags/getApplicationList`);
 // const GetApplicationInfoById = require(`${global.__base}/server/modules/tags/getApplicationInfoById`);
 
@@ -45,24 +45,24 @@ module.exports.getTagStatusList = async (req, res) => {
   }
 };
 
-// module.exports.changeApplicationStatus = async (req, res) => {
-//   try {
-//     logger.requestRest(req, 'changeApplicationStatus');
-//
-//     const changeApplicationStatus = new ChangeApplicationStatus(req.requestId, req.body);
-//
-//     await changeApplicationStatus.bodyValidation();
-//     await changeApplicationStatus.validateCurrentStatus();
-//     await changeApplicationStatus.updateApplicationStatus();
-//
-//     const responseBody = await changeApplicationStatus.responseBody();
-//
-//     response.success(req.requestId, responseBody, res);
-//   } catch (e) {
-//     response.failure(req.requestId, e, res);
-//   }
-// };
-//
+module.exports.changeTagStatus = async (req, res) => {
+  try {
+    logger.requestRest(req, 'changeTagStatus');
+
+    const changeTagStatus = new ChangeTagStatus(req.requestId, req.body);
+
+    await changeTagStatus.bodyValidation();
+    await changeTagStatus.validateCurrentStatus();
+    await changeTagStatus.updateTagStatus();
+
+    const responseBody = await changeTagStatus.responseBody();
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};
+
 // module.exports.getApplicationList = async (req, res) => {
 //   try {
 //     logger.requestRest(req, 'getApplicationList', req.query);

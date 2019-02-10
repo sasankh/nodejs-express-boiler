@@ -30,6 +30,7 @@ const routes = {
   // tag management
   addTag: '/api/tags/add',
   tagStatusList: '/api/tags/status/list',
+  tagStatusChange: '/api/tags/status/change',
 };
 
 module.exports = routes;

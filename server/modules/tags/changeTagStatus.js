@@ -10,28 +10,28 @@ const {
 } = require(`${global.__base}/server/utilities`);
 
 const {
-  applicationStatusList
-} = require(`${global.__base}/server/config/applications.dataFile`);
+  tagStatusList
+} = require(`${global.__base}/server/config/tags.dataFile`);
 
-// ChangeApplicationStatus Modules
-function ChangeApplicationStatus(requestId, body) {
+// ChangeTagStatus Modules
+function ChangeTagStatus(requestId, body) {
   this.requestId = requestId;
   this.body = body;
 }
 
-module.exports = ChangeApplicationStatus;
+module.exports = ChangeTagStatus;
 
-ChangeApplicationStatus.prototype.bodyValidation = function () {
+ChangeTagStatus.prototype.bodyValidation = function () {
   return new Promise((resolve, reject) => {
     try {
       logger.debug(this.requestId, 'bodyValidation');
 
       const schema = Joi.object().keys({
-        application_id: Joi.string().guid().empty(['', null]).trim().required(),
-        current_status: Joi.string().empty(['', null]).trim().valid(applicationStatusList).required(),
-        new_status: Joi.string().empty(['', null]).trim().valid(applicationStatusList).required()
+        tag_id: Joi.string().guid().empty(['', null]).trim().required(),
+        current_status: Joi.string().empty(['', null]).trim().valid(tagStatusList).required(),
+        new_status: Joi.string().empty(['', null]).trim().valid(tagStatusList).required()
       })
-      .with('application_id', 'current_status')
+      .with('tag_id', 'current_status')
       .with('current_status', 'new_status');
 
       Joi.validate(this.body, schema, (err, value) => {
@@ -51,13 +51,13 @@ ChangeApplicationStatus.prototype.bodyValidation = function () {
   });
 };
 
-ChangeApplicationStatus.prototype.validateCurrentStatus = function () {
+ChangeTagStatus.prototype.validateCurrentStatus = function () {
   return new Promise(async (resolve, reject) => {
     try {
       logger.debug(this.requestId, 'validateCurrentStatus');
 
-      const query = `SELECT a.application_name, a.status FROM applications a WHERE a.application_id = ? AND a.status = ?`
-      const post = [this.body.application_id, this.body.current_status];
+      const query = `SELECT t.tag, t.status FROM tags t WHERE t.tag_id = ? AND t.status = ?`;
+      const post = [this.body.tag_id, this.body.current_status];
 
       const {
         results
@@ -68,13 +68,13 @@ ChangeApplicationStatus.prototype.validateCurrentStatus = function () {
       } else if (results.length === 0){
         reject({
           code: 103,
-          custom_message: 'Invalid application or current application status',
+          custom_message: 'Invalid tag or current tag status',
           level: 'debug'
         });
       } else {
         reject({
           code: 102,
-          message: 'More then one application result found for the give condition. This should not happen',
+          message: 'More then one tag result found for the give condition. This should not happen',
           level: 'error'
         });
       }
@@ -84,15 +84,15 @@ ChangeApplicationStatus.prototype.validateCurrentStatus = function () {
   });
 };
 
-ChangeApplicationStatus.prototype.updateApplicationStatus = function () {
+ChangeTagStatus.prototype.updateTagStatus = function () {
   return new Promise(async (resolve, reject) => {
     try {
-      logger.debug(this.requestId, 'updateApplicationStatus');
+      logger.debug(this.requestId, 'updateTagStatus');
 
-      const query = 'UPDATE applications a SET a.status = ? WHERE a.application_id = ? AND a.status = ?';
+      const query = 'UPDATE tags t SET t.status = ? WHERE t.tag_id = ? AND t.status = ?';
       const post = [
         this.body.new_status,
-        this.body.application_id,
+        this.body.tag_id,
         this.body.current_status
       ];
 
@@ -105,12 +105,12 @@ ChangeApplicationStatus.prototype.updateApplicationStatus = function () {
   });
 };
 
-ChangeApplicationStatus.prototype.responseBody = function () {
+ChangeTagStatus.prototype.responseBody = function () {
   return new Promise((resolve) => {
     logger.debug(this.requestId, 'responseBody');
 
     const responseBody = {
-      application_id: this.body.application_id,
+      tag_id: this.body.tag_id,
       status_updated: true,
       status: this.body.new_status
     };
