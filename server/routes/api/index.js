@@ -14,6 +14,7 @@ const registration = require(`${global.__base}/server/handlers/registration`);
 const external = require(`${global.__base}/server/handlers/external`);
 const users = require(`${global.__base}/server/handlers/users`);
 const applications = require(`${global.__base}/server/handlers/applications`);
+const tags = require(`${global.__base}/server/handlers/tags`);
 
 module.exports = (app) => {
   // health checks
@@ -40,14 +41,19 @@ module.exports = (app) => {
   app.put(route.editUserInfo, users.editUserInfo);
   app.post(route.userTagActions, users.userTagActions);
 
-  // tag management
-
   // application management
   app.post(route.addApplication, applications.addApplication);
   app.get(route.applicationStatusList, applications.getApplicationStatusList);
   app.put(route.applicationStatusChange, applications.changeApplicationStatus);
   app.get(route.applicationList, applications.getApplicationList);
   app.get(route.applicationInfoById, applications.getApplicationInfoById)
+
+  // tag management
+  app.post(route.addTag, tags.addTag);
+  // app.get(route.applicationStatusList, tags.getApplicationStatusList);
+  // app.put(route.applicationStatusChange, tags.changeApplicationStatus);
+  // app.get(route.applicationList, tags.getApplicationList);
+  // app.get(route.applicationInfoById, tags.getApplicationInfoById)
 
   logger.info('SERVICE', 'Routes initialized.');
 };

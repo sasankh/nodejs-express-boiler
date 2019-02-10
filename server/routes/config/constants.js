@@ -20,14 +20,15 @@ const routes = {
   editUserInfo: '/api/users/info/edit',
   userTagActions: '/api/users/tags/action',
 
-  // tag management
-
   // application management
   addApplication: '/api/applications/add',
   applicationStatusList: '/api/applications/status/list',
   applicationStatusChange: '/api/applications/status/change',
   applicationList: '/api/applications/list',
   applicationInfoById: '/api/applications/info/:id',
+
+  // tag management
+  addTag: '/api/tags/add',
 };
 
 module.exports = routes;
