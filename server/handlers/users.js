@@ -14,6 +14,7 @@ const GetUserList = require(`${global.__base}/server/modules/users/getUserList`)
 const ResetPassword = require(`${global.__base}/server/modules/users/resetPassword`);
 const GetUserInfoById = require(`${global.__base}/server/modules/users/getUserInfoById`);
 const ChangeUserStatus = require(`${global.__base}/server/modules/users/changeUserStatus`);
+const GetUserTags = require(`${global.__base}/server/modules/users/getUserTags`);
 
 module.exports.addUser = async (req, res) => {
   try {
@@ -114,6 +115,22 @@ module.exports.changeUserStatus = async (req, res) => {
     await changeUserStatus.updateUserStatus();
 
     const responseBody = await changeUserStatus.responseBody();
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};
+
+module.exports.getUserTags = async (req, res) => {
+  try {
+    logger.requestRest(req, 'getUserTags', req.params);
+
+    const getUserTags = new GetUserTags(req.requestId, req.params);
+
+    await getUserTags.paramValidation();
+    const { activeTags } = await getUserTags.getUserTags();
+    const responseBody = await getUserTags.responseBody(activeTags);
 
     response.success(req.requestId, responseBody, res);
   } catch (e) {
