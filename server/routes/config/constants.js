@@ -25,6 +25,7 @@ const routes = {
   // application management
   addApplication: '/api/applications/add',
   applicationStatusList: '/api/applications/status/list',
+  applicationStatusChange: '/api/applications/status/change',
 };
 
 module.exports = routes;

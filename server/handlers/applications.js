@@ -10,10 +10,10 @@ const {
 } = require(`${global.__base}/server/config/applications.dataFile`);
 
 const AddApplication = require(`${global.__base}/server/modules/applications/addApplication`);
+const ChangeApplicationStatus = require(`${global.__base}/server/modules/applications/changeApplicationStatus`);
 // const GetUserList = require(`${global.__base}/server/modules/applications/getUserList`);
 // const ResetPassword = require(`${global.__base}/server/modules/applications/resetPassword`);
 // const GetUserInfoById = require(`${global.__base}/server/modules/applications/getUserInfoById`);
-// const ChangeUserStatus = require(`${global.__base}/server/modules/applications/changeUserStatus`);
 // const GetUserTags = require(`${global.__base}/server/modules/applications/getUserTags`);
 // const EditUserInfo = require(`${global.__base}/server/modules/applications/editUserInfo`);
 // const UserTagActions = require(`${global.__base}/server/modules/applications/userTagActions`);
@@ -42,6 +42,24 @@ module.exports.getApplicationStatusList = async (req, res) => {
     const responseBody = {
       status_list: applicationStatusList
     }
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};
+
+module.exports.changeApplicationStatus = async (req, res) => {
+  try {
+    logger.requestRest(req, 'changeApplicationStatus');
+
+    const changeApplicationStatus = new ChangeApplicationStatus(req.requestId, req.body);
+
+    await changeApplicationStatus.bodyValidation();
+    await changeApplicationStatus.validateCurrentStatus();
+    await changeApplicationStatus.updateApplicationStatus();
+
+    const responseBody = await changeApplicationStatus.responseBody();
 
     response.success(req.requestId, responseBody, res);
   } catch (e) {
@@ -105,25 +123,7 @@ module.exports.getApplicationStatusList = async (req, res) => {
 //     response.failure(req.requestId, e, res);
 //   }
 // };
-//
-// module.exports.changeUserStatus = async (req, res) => {
-//   try {
-//     logger.requestRest(req, 'changeUserStatus');
-//
-//     const changeUserStatus = new ChangeUserStatus(req.requestId, req.body);
-//
-//     await changeUserStatus.bodyValidation();
-//     await changeUserStatus.validateCurrentStatus();
-//     await changeUserStatus.updateUserStatus();
-//
-//     const responseBody = await changeUserStatus.responseBody();
-//
-//     response.success(req.requestId, responseBody, res);
-//   } catch (e) {
-//     response.failure(req.requestId, e, res);
-//   }
-// };
-//
+
 // module.exports.getUserTags = async (req, res) => {
 //   try {
 //     logger.requestRest(req, 'getUserTags', req.params);
