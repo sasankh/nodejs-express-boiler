@@ -46,6 +46,7 @@ module.exports = (app) => {
   app.post(route.addApplication, applications.addApplication);
   app.get(route.applicationStatusList, applications.getApplicationStatusList);
   app.put(route.applicationStatusChange, applications.changeApplicationStatus);
+  app.get(route.applicationList, applications.getApplicationList);
 
   logger.info('SERVICE', 'Routes initialized.');
 };

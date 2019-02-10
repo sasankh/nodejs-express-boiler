@@ -11,7 +11,7 @@ const {
 
 const AddApplication = require(`${global.__base}/server/modules/applications/addApplication`);
 const ChangeApplicationStatus = require(`${global.__base}/server/modules/applications/changeApplicationStatus`);
-// const GetUserList = require(`${global.__base}/server/modules/applications/getUserList`);
+const GetApplicationList = require(`${global.__base}/server/modules/applications/getApplicationList`);
 // const ResetPassword = require(`${global.__base}/server/modules/applications/resetPassword`);
 // const GetUserInfoById = require(`${global.__base}/server/modules/applications/getUserInfoById`);
 // const GetUserTags = require(`${global.__base}/server/modules/applications/getUserTags`);
@@ -67,29 +67,29 @@ module.exports.changeApplicationStatus = async (req, res) => {
   }
 };
 
-// module.exports.getUserList = async (req, res) => {
-//   try {
-//     logger.requestRest(req, 'getUserList', req.query);
-//
-//     const getUserList = new GetUserList(req.requestId, req.query);
-//
-//     await getUserList.queryValidation();
-//     const {
-//       userListQuery,
-//       totalUserQuery
-//     } = await getUserList.constructUserListQueries();
-//     const {
-//       userList,
-//       totalUsers
-//     } = await getUserList.getUserList(userListQuery, totalUserQuery);
-//     const responseBody = await getUserList.responseBody(userList, totalUsers);
-//
-//     response.success(req.requestId, responseBody, res);
-//   } catch (e) {
-//     response.failure(req.requestId, e, res);
-//   }
-// };
-//
+module.exports.getApplicationList = async (req, res) => {
+  try {
+    logger.requestRest(req, 'getApplicationList', req.query);
+
+    const getApplicationList = new GetApplicationList(req.requestId, req.query);
+
+    await getApplicationList.queryValidation();
+    const {
+      applicationListQuery,
+      totalApplicationQuery
+    } = await getApplicationList.constructApplicationListQueries();
+    const {
+      applicationList,
+      totalApplications
+    } = await getApplicationList.getApplicationList(applicationListQuery, totalApplicationQuery);
+    const responseBody = await getApplicationList.responseBody(applicationList, totalApplications);
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};
+
 // module.exports.resetPassword = async (req, res) => {
 //   try {
 //     logger.requestRest(req, 'resetPassword');

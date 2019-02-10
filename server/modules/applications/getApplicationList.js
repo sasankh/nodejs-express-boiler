@@ -9,22 +9,20 @@ const {
   mysql
 } = require(`${global.__base}/server/utilities`);
 
-// getUserList Modules
-function GetUserList(requestId, query) {
+// GetApplicationList Modules
+function GetApplicationList(requestId, query) {
   this.requestId = requestId;
   this.query = query;
 }
 
-module.exports = GetUserList;
+module.exports = GetApplicationList;
 
-GetUserList.prototype.queryValidation = function () {
+GetApplicationList.prototype.queryValidation = function () {
   return new Promise((resolve, reject) => {
     try {
       logger.debug(this.requestId, 'queryValidation');
 
       const schema = Joi.object().keys({
-        limit: Joi.number().min(1).empty(['', null]).default(20),
-        page: Joi.number().min(1).empty(['', null]).default(1),
         search_term: Joi.string().empty(['', null]).trim()
       });
 
@@ -45,23 +43,21 @@ GetUserList.prototype.queryValidation = function () {
   });
 };
 
-GetUserList.prototype.constructUserListQueries = function () {
+GetApplicationList.prototype.constructApplicationListQueries = function () {
   return new Promise(async (resolve, reject) => {
     try {
-      logger.debug(this.requestId, 'constructUserListQueries');
+      logger.debug(this.requestId, 'constructApplicationListQueries');
 
       const retrieve_columns = [
-        'u.user_id',
-        'u.username',
-        'u.created_at',
-        'u.reset_password',
-        'u.email',
-        'u.phone',
-        'u.full_name',
-        'u.status'
+        'a.application_id',
+        'a.application_name',
+        'a.status',
+        'CONVERT(a.description USING utf8) as description',
+        'a.created_at',
+        'a.created_by'
       ];
 
-      const fromSection = ' users as u ';
+      const fromSection = ' applications as a ';
 
       const whereList = [];
       const orderByList = [];
@@ -73,12 +69,12 @@ GetUserList.prototype.constructUserListQueries = function () {
         const escapedSearchTerm = mysql.escape(this.query.search_term);
         let likeCondition = `'%${escapedSearchTerm.substring(1, escapedSearchTerm.length - 1)}%'`;
 
-        const searchSection = ` ((u.username LIKE ${likeCondition}) OR (u.email LIKE ${likeCondition}) OR (u.full_name LIKE ${likeCondition}))`;
+        const searchSection = ` ((a.application_name LIKE ${likeCondition}))`;
 
         whereList.push(searchSection)
       }
 
-      orderByList.push(' u.username ASC ')
+      orderByList.push(' a.application_name ASC ');
 
       if (whereList.length > 0) {
         whereSection = ` WHERE ${whereList.join(' AND ')}`;
@@ -88,15 +84,12 @@ GetUserList.prototype.constructUserListQueries = function () {
         orderBySection = ` ORDER BY ${orderByList.join(', ')}`;
       }
 
-      const pageToUse = this.query.page - 1;
-      const offset = (this.query.limit * pageToUse);
-
-      const userListQuery = `SELECT ${retrieve_columns.join(',')} FROM ${fromSection} ${whereSection} ${orderBySection} LIMIT ${this.query.limit} OFFSET ${offset};`
-      const totalUserQuery = `SELECT COUNT(*) as total FROM ${fromSection} ${whereSection};`;
+      const applicationListQuery = `SELECT ${retrieve_columns.join(',')} FROM ${fromSection} ${whereSection} ${orderBySection};`
+      const totalApplicationQuery = `SELECT COUNT(*) as total FROM ${fromSection} ${whereSection};`;
 
       resolve({
-        userListQuery,
-        totalUserQuery
+        applicationListQuery,
+        totalApplicationQuery
       });
     } catch (e) {
       reject(e);
@@ -104,24 +97,24 @@ GetUserList.prototype.constructUserListQueries = function () {
   });
 };
 
-GetUserList.prototype.getUserList = function (userListQuery, totalUserQuery) {
+GetApplicationList.prototype.getApplicationList = function (applicationListQuery, totalApplicationQuery) {
   return new Promise(async (resolve, reject) => {
     try {
-      logger.debug(this.requestId, 'getUserList');
+      logger.debug(this.requestId, 'getApplicationList');
 
       const {
-        results: userList
-      } = await mysql.query(this.requestId, 'internal', userListQuery, []);
+        results: applicationList
+      } = await mysql.query(this.requestId, 'internal', applicationListQuery, []);
 
       const {
         results: totalResult
-      } = await mysql.query(this.requestId, 'internal', totalUserQuery, []);
+      } = await mysql.query(this.requestId, 'internal', totalApplicationQuery, []);
 
-      const totalUsers = totalResult[0].total;
+      const totalApplications = totalResult[0].total;
 
       resolve({
-        userList,
-        totalUsers
+        applicationList,
+        totalApplications
       });
     } catch (e) {
       reject(e);
@@ -129,14 +122,14 @@ GetUserList.prototype.getUserList = function (userListQuery, totalUserQuery) {
   });
 };
 
-GetUserList.prototype.responseBody = function (userList, totalUsers) {
+GetApplicationList.prototype.responseBody = function (applicationList, totalApplications) {
   return new Promise((resolve) => {
     logger.debug(this.requestId, 'responseBody');
 
     const responseBody = {
-      users: userList,
-      list_length: userList.length,
-      total_users: totalUsers,
+      applications: applicationList,
+      list_length: applicationList.length,
+      total_applications: totalApplications,
       query: this.query
     };
 
