@@ -40,13 +40,14 @@ module.exports = (app) => {
   app.put(route.editUserInfo, users.editUserInfo);
   app.post(route.userTagActions, users.userTagActions);
 
-  // role management
+  // tag management
 
   // application management
   app.post(route.addApplication, applications.addApplication);
   app.get(route.applicationStatusList, applications.getApplicationStatusList);
   app.put(route.applicationStatusChange, applications.changeApplicationStatus);
   app.get(route.applicationList, applications.getApplicationList);
+  app.get(route.applicationInfoById, applications.getApplicationInfoById)
 
   logger.info('SERVICE', 'Routes initialized.');
 };
