@@ -105,10 +105,10 @@ ResetPassword.prototype.authenticateUser = function (password_hash) {
   });
 };
 
-ResetPassword.prototype.insertNewPassword = function (password_salt) {
+ResetPassword.prototype.updateUserPassword = function (password_salt) {
   return new Promise(async (resolve, reject) => {
     try {
-      logger.debug(this.requestId, 'insertNewPassword');
+      logger.debug(this.requestId, 'updateUserPassword');
 
       const password_hash = await bcrypt.hash(this.requestId, password_salt, this.body.new_password);
 

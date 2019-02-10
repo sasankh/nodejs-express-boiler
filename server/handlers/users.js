@@ -64,7 +64,7 @@ module.exports.resetPassword = async (req, res) => {
     await resetPassword.bodyValidation();
     const { password_hash, password_salt } = await resetPassword.getUserData();
     await resetPassword.authenticateUser(password_hash);
-    await resetPassword.insertNewPassword(password_salt);
+    await resetPassword.updateUserPassword(password_salt);
     const responseBody = await resetPassword.responseBody();
 
     response.success(req.requestId, responseBody, res);
