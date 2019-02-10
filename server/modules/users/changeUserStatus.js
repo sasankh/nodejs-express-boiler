@@ -56,7 +56,7 @@ ChangeUserStatus.prototype.validateCurrentStatus = function () {
     try {
       logger.debug(this.requestId, 'validateCurrentStatus');
 
-      const query = `SELECT u.username, u.status FROM users u WHERE user_id = ? AND u.status = ?`
+      const query = `SELECT u.username, u.status FROM users u WHERE u.user_id = ? AND u.status = ?`
       const post = [this.body.user_id, this.body.current_status];
 
       const {

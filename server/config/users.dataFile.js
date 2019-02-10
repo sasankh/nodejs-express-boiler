@@ -5,6 +5,12 @@ const userStatusList = [
   'DISABLED'
 ];
 
+const userTagActions = [
+  'ADD',
+  'REMOVE'
+];
+
 module.exports = {
-  userStatusList
+  userStatusList,
+  userTagActions
 }

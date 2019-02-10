@@ -16,6 +16,7 @@ const GetUserInfoById = require(`${global.__base}/server/modules/users/getUserIn
 const ChangeUserStatus = require(`${global.__base}/server/modules/users/changeUserStatus`);
 const GetUserTags = require(`${global.__base}/server/modules/users/getUserTags`);
 const EditUserInfo = require(`${global.__base}/server/modules/users/editUserInfo`);
+const UserTagActions = require(`${global.__base}/server/modules/users/userTagActions`);
 
 module.exports.addUser = async (req, res) => {
   try {
@@ -149,6 +150,23 @@ module.exports.editUserInfo = async (req, res) => {
     const userInfo = await editUserInfo.getUserInfo();
     await editUserInfo.updateUserInfo(userInfo);
     const responseBody = await editUserInfo.responseBody();
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};
+
+module.exports.userTagActions = async (req, res) => {
+  try {
+    logger.requestRest(req, 'userTagActions');
+
+    const userTagActions = new UserTagActions(req.requestId, req.body);
+
+    await userTagActions.bodyValidation();
+    const userTagRelationExist = await userTagActions.checkIfUserTagRelationExist();
+    await userTagActions.performUserTagAction(userTagRelationExist);
+    const responseBody = await userTagActions.responseBody();
 
     response.success(req.requestId, responseBody, res);
   } catch (e) {

@@ -17,7 +17,8 @@ const routes = {
   userInfoById: '/api/users/info/:id',
   userStatusChange: '/api/users/status/change',
   userTags: '/api/users/tags/:id',
-  editUserInfo: '/api/users/info/edit'
+  editUserInfo: '/api/users/info/edit',
+  userTagActions: '/api/users/tags/action'
 
   // role management
 
