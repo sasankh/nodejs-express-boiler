@@ -9,15 +9,15 @@ const {
   mysql
 } = require(`${global.__base}/server/utilities`);
 
-// GetApplicationList Modules
-function GetApplicationList(requestId, query) {
+// GetTagList Modules
+function GetTagList(requestId, query) {
   this.requestId = requestId;
   this.query = query;
 }
 
-module.exports = GetApplicationList;
+module.exports = GetTagList;
 
-GetApplicationList.prototype.queryValidation = function () {
+GetTagList.prototype.queryValidation = function () {
   return new Promise((resolve, reject) => {
     try {
       logger.debug(this.requestId, 'queryValidation');
@@ -43,21 +43,22 @@ GetApplicationList.prototype.queryValidation = function () {
   });
 };
 
-GetApplicationList.prototype.constructApplicationListQueries = function () {
+GetTagList.prototype.constructTagListQueries = function () {
   return new Promise(async (resolve, reject) => {
     try {
-      logger.debug(this.requestId, 'constructApplicationListQueries');
+      logger.debug(this.requestId, 'constructTagListQueries');
 
       const retrieve_columns = [
-        'a.application_id',
-        'a.application_name',
-        'a.status',
-        'CONVERT(a.description USING utf8) as description',
-        'a.created_at',
-        'a.created_by'
+        't.tag_id',
+        't.tag',
+        't.status',
+        'CONVERT(t.description USING utf8) as description',
+        't.created_at',
+        't.created_by',
+        'a.application_name'
       ];
 
-      const fromSection = ' applications as a ';
+      const fromSection = ' tags t LEFT JOIN applications a ON t.application_id = a.application_id ';
 
       const whereList = [];
       const orderByList = [];
@@ -69,12 +70,12 @@ GetApplicationList.prototype.constructApplicationListQueries = function () {
         const escapedSearchTerm = mysql.escape(this.query.search_term);
         let likeCondition = `'%${escapedSearchTerm.substring(1, escapedSearchTerm.length - 1)}%'`;
 
-        const searchSection = ` ((a.application_name LIKE ${likeCondition}))`;
+        const searchSection = ` ((t.tag LIKE ${likeCondition}))`;
 
         whereList.push(searchSection)
       }
 
-      orderByList.push(' a.application_name ASC ');
+      orderByList.push(' t.tag ASC ');
 
       if (whereList.length > 0) {
         whereSection = ` WHERE ${whereList.join(' AND ')}`;
@@ -84,12 +85,12 @@ GetApplicationList.prototype.constructApplicationListQueries = function () {
         orderBySection = ` ORDER BY ${orderByList.join(', ')}`;
       }
 
-      const applicationListQuery = `SELECT ${retrieve_columns.join(',')} FROM ${fromSection} ${whereSection} ${orderBySection};`
-      const totalApplicationQuery = `SELECT COUNT(*) as total FROM ${fromSection} ${whereSection};`;
+      const tagListQuery = `SELECT ${retrieve_columns.join(',')} FROM ${fromSection} ${whereSection} ${orderBySection};`
+      const totalTagQuery = `SELECT COUNT(*) as total FROM ${fromSection} ${whereSection};`;
 
       resolve({
-        applicationListQuery,
-        totalApplicationQuery
+        tagListQuery,
+        totalTagQuery
       });
     } catch (e) {
       reject(e);
@@ -97,24 +98,24 @@ GetApplicationList.prototype.constructApplicationListQueries = function () {
   });
 };
 
-GetApplicationList.prototype.getApplicationList = function (applicationListQuery, totalApplicationQuery) {
+GetTagList.prototype.getTagList = function (tagListQuery, totalTagQuery) {
   return new Promise(async (resolve, reject) => {
     try {
-      logger.debug(this.requestId, 'getApplicationList');
+      logger.debug(this.requestId, 'getTagList');
 
       const {
-        results: applicationList
-      } = await mysql.query(this.requestId, 'internal', applicationListQuery, []);
+        results: tagList
+      } = await mysql.query(this.requestId, 'internal', tagListQuery, []);
 
       const {
         results: totalResult
-      } = await mysql.query(this.requestId, 'internal', totalApplicationQuery, []);
+      } = await mysql.query(this.requestId, 'internal', totalTagQuery, []);
 
-      const totalApplications = totalResult[0].total;
+      const totalTags = totalResult[0].total;
 
       resolve({
-        applicationList,
-        totalApplications
+        tagList,
+        totalTags
       });
     } catch (e) {
       reject(e);
@@ -122,14 +123,14 @@ GetApplicationList.prototype.getApplicationList = function (applicationListQuery
   });
 };
 
-GetApplicationList.prototype.responseBody = function (applicationList, totalApplications) {
+GetTagList.prototype.responseBody = function (tagList, totalTags) {
   return new Promise((resolve) => {
     logger.debug(this.requestId, 'responseBody');
 
     const responseBody = {
-      applications: applicationList,
-      list_length: applicationList.length,
-      total_applications: totalApplications,
+      tags: tagList,
+      list_length: tagList.length,
+      total_tags: totalTags,
       query: this.query
     };
 

@@ -52,7 +52,7 @@ module.exports = (app) => {
   app.post(route.addTag, tags.addTag);
   app.get(route.tagStatusList, tags.getTagStatusList);
   app.put(route.tagStatusChange, tags.changeTagStatus);
-  // app.get(route.applicationList, tags.getApplicationList);
+  app.get(route.tagList, tags.getTagList);
   app.get(route.tagInfoById, tags.getTagInfoById);
 
   logger.info('SERVICE', 'Routes initialized.');

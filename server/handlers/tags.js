@@ -11,7 +11,7 @@ const {
 
 const AddTag = require(`${global.__base}/server/modules/tags/addTag`);
 const ChangeTagStatus = require(`${global.__base}/server/modules/tags/changeTagStatus`);
-// const GetApplicationList = require(`${global.__base}/server/modules/tags/getApplicationList`);
+const GetTagList = require(`${global.__base}/server/modules/tags/getTagList`);
 const GetTagInfoById = require(`${global.__base}/server/modules/tags/getTagInfoById`);
 
 module.exports.addTag = async (req, res) => {
@@ -63,28 +63,28 @@ module.exports.changeTagStatus = async (req, res) => {
   }
 };
 
-// module.exports.getApplicationList = async (req, res) => {
-//   try {
-//     logger.requestRest(req, 'getApplicationList', req.query);
-//
-//     const getApplicationList = new GetApplicationList(req.requestId, req.query);
-//
-//     await getApplicationList.queryValidation();
-//     const {
-//       applicationListQuery,
-//       totalApplicationQuery
-//     } = await getApplicationList.constructApplicationListQueries();
-//     const {
-//       applicationList,
-//       totalApplications
-//     } = await getApplicationList.getApplicationList(applicationListQuery, totalApplicationQuery);
-//     const responseBody = await getApplicationList.responseBody(applicationList, totalApplications);
-//
-//     response.success(req.requestId, responseBody, res);
-//   } catch (e) {
-//     response.failure(req.requestId, e, res);
-//   }
-// };
+module.exports.getTagList = async (req, res) => {
+  try {
+    logger.requestRest(req, 'getTagList', req.query);
+
+    const getTagList = new GetTagList(req.requestId, req.query);
+
+    await getTagList.queryValidation();
+    const {
+      tagListQuery,
+      totalTagQuery
+    } = await getTagList.constructTagListQueries();
+    const {
+      tagList,
+      totalTags
+    } = await getTagList.getTagList(tagListQuery, totalTagQuery);
+    const responseBody = await getTagList.responseBody(tagList, totalTags);
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};
 
 module.exports.getTagInfoById = async (req, res) => {
   try {
