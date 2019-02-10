@@ -5,9 +5,14 @@ const {
   response
 } = require(`${global.__base}/server/utilities`);
 
+const {
+  userStatusList
+} = require(`${global.__base}/server/config/users.dataFile`);
+
 const AddUser = require(`${global.__base}/server/modules/users/addUser`);
 const GetUserList = require(`${global.__base}/server/modules/users/getUserList`);
 const ResetPassword = require(`${global.__base}/server/modules/users/resetPassword`);
+const GetUserInfoById = require(`${global.__base}/server/modules/users/getUserInfoById`);
 
 module.exports.addUser = async (req, res) => {
   try {
@@ -60,6 +65,36 @@ module.exports.resetPassword = async (req, res) => {
     await resetPassword.authenticateUser(password_hash);
     await resetPassword.insertNewPassword(password_salt);
     const responseBody = await resetPassword.responseBody();
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};
+
+module.exports.getUserStatusList = async (req, res) => {
+  try {
+    logger.requestRest(req, 'getUserStatusList');
+
+    const responseBody = {
+      status_list: userStatusList
+    }
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};
+
+module.exports.getUserInfoById = async (req, res) => {
+  try {
+    logger.requestRest(req, 'getUserInfoById', req.params);
+
+    const getUserInfoById = new GetUserInfoById(req.requestId, req.params);
+
+    await getUserInfoById.paramValidation();
+    const userInfo = await getUserInfoById.getUserInfoById();
+    const responseBody = await getUserInfoById.responseBody(userInfo);
 
     response.success(req.requestId, responseBody, res);
   } catch (e) {

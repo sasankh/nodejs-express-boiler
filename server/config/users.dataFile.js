@@ -4,3 +4,7 @@ const userStatusList = [
   'ACTIVE',
   'DISABLED'
 ];
+
+module.exports = {
+  userStatusList
+}
