@@ -42,9 +42,6 @@ ResetPassword.prototype.bodyValidation = function () {
             message: 'Missing or invalid required parameter'
           });
         } else {
-          console.log('#$#$#$#$#$#')
-          console.log(value)
-          console.log('#$#$#$#$#$#')
           this.body = value;
           resolve();
         }

@@ -13,6 +13,7 @@ const AddUser = require(`${global.__base}/server/modules/users/addUser`);
 const GetUserList = require(`${global.__base}/server/modules/users/getUserList`);
 const ResetPassword = require(`${global.__base}/server/modules/users/resetPassword`);
 const GetUserInfoById = require(`${global.__base}/server/modules/users/getUserInfoById`);
+const ChangeUserStatus = require(`${global.__base}/server/modules/users/changeUserStatus`);
 
 module.exports.addUser = async (req, res) => {
   try {
@@ -95,6 +96,24 @@ module.exports.getUserInfoById = async (req, res) => {
     await getUserInfoById.paramValidation();
     const userInfo = await getUserInfoById.getUserInfoById();
     const responseBody = await getUserInfoById.responseBody(userInfo);
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};
+
+module.exports.changeUserStatus = async (req, res) => {
+  try {
+    logger.requestRest(req, 'changeUserStatus');
+
+    const changeUserStatus = new ChangeUserStatus(req.requestId, req.body);
+
+    await changeUserStatus.bodyValidation();
+    await changeUserStatus.validateCurrentStatus();
+    await changeUserStatus.updateUserStatus();
+
+    const responseBody = await changeUserStatus.responseBody();
 
     response.success(req.requestId, responseBody, res);
   } catch (e) {

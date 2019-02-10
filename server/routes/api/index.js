@@ -34,6 +34,7 @@ module.exports = (app) => {
   app.put(route.resetPassword, users.resetPassword);
   app.get(route.userStatusList, users.getUserStatusList);
   app.get(route.userInfoById, users.getUserInfoById);
+  app.put(route.userStatusChange, users.changeUserStatus);
 
   // role management
 
