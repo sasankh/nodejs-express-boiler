@@ -27,7 +27,7 @@ ChangeUserStatus.prototype.bodyValidation = function () {
       logger.debug(this.requestId, 'bodyValidation');
 
       const schema = Joi.object().keys({
-        user_id: Joi.string().guid().empty(['', null]).trim(),
+        user_id: Joi.string().guid().empty(['', null]).trim().required(),
         current_status: Joi.string().empty(['', null]).trim().valid(userStatusList).required(),
         new_status: Joi.string().empty(['', null]).trim().valid(userStatusList).required()
       })

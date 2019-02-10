@@ -59,15 +59,15 @@ GetUserInfoById.prototype.getUserInfoById = function () {
         'u.status'
       ];
 
-      const query = `SELECT ${retrieve_columns.join(',')} FROM users u WHERE user_id = ?`
-      const post = [this.params.id]
+      const query = `SELECT ${retrieve_columns.join(',')} FROM users u WHERE u.user_id = ?`
+      const post = [this.params.id];
 
       const {
         results
       } = await mysql.query(this.requestId, 'internal', query, post);
 
       if (results.length === 1) {
-        resolve(results[0])
+        resolve(results[0]);
       } else if (results.length === 0){
         reject({
           code: 103,

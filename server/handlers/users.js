@@ -15,6 +15,7 @@ const ResetPassword = require(`${global.__base}/server/modules/users/resetPasswo
 const GetUserInfoById = require(`${global.__base}/server/modules/users/getUserInfoById`);
 const ChangeUserStatus = require(`${global.__base}/server/modules/users/changeUserStatus`);
 const GetUserTags = require(`${global.__base}/server/modules/users/getUserTags`);
+const EditUserInfo = require(`${global.__base}/server/modules/users/editUserInfo`);
 
 module.exports.addUser = async (req, res) => {
   try {
@@ -131,6 +132,23 @@ module.exports.getUserTags = async (req, res) => {
     await getUserTags.paramValidation();
     const { activeTags } = await getUserTags.getUserTags();
     const responseBody = await getUserTags.responseBody(activeTags);
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};
+
+module.exports.editUserInfo = async (req, res) => {
+  try {
+    logger.requestRest(req, 'editUserInfo');
+
+    const editUserInfo = new EditUserInfo(req.requestId, req.body);
+
+    await editUserInfo.bodyValidation();
+    const userInfo = await editUserInfo.getUserInfo();
+    await editUserInfo.updateUserInfo(userInfo);
+    const responseBody = await editUserInfo.responseBody();
 
     response.success(req.requestId, responseBody, res);
   } catch (e) {
