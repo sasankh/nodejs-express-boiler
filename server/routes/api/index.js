@@ -13,6 +13,7 @@ const health = require(`${global.__base}/server/handlers/health`);
 const registration = require(`${global.__base}/server/handlers/registration`);
 const external = require(`${global.__base}/server/handlers/external`);
 const users = require(`${global.__base}/server/handlers/users`);
+const applications = require(`${global.__base}/server/handlers/applications`);
 
 module.exports = (app) => {
   // health checks
@@ -42,6 +43,8 @@ module.exports = (app) => {
   // role management
 
   // application management
+  app.post(route.addApplication, applications.addApplication);
+  app.get(route.applicationStatusList, applications.getApplicationStatusList);
 
   logger.info('SERVICE', 'Routes initialized.');
 };

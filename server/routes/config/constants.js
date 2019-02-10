@@ -18,11 +18,13 @@ const routes = {
   userStatusChange: '/api/users/status/change',
   userTags: '/api/users/tags/:id',
   editUserInfo: '/api/users/info/edit',
-  userTagActions: '/api/users/tags/action'
+  userTagActions: '/api/users/tags/action',
 
   // role management
 
   // application management
+  addApplication: '/api/applications/add',
+  applicationStatusList: '/api/applications/status/list',
 };
 
 module.exports = routes;
