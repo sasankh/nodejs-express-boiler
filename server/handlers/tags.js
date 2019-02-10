@@ -6,8 +6,8 @@ const {
 } = require(`${global.__base}/server/utilities`);
 
 const {
-  applicationStatusList
-} = require(`${global.__base}/server/config/applications.dataFile`);
+  tagStatusList
+} = require(`${global.__base}/server/config/tags.dataFile`);
 
 const AddTag = require(`${global.__base}/server/modules/tags/addTag`);
 // const ChangeApplicationStatus = require(`${global.__base}/server/modules/tags/changeApplicationStatus`);
@@ -31,20 +31,20 @@ module.exports.addTag = async (req, res) => {
   }
 };
 
-// module.exports.getApplicationStatusList = async (req, res) => {
-//   try {
-//     logger.requestRest(req, 'getApplicationStatusList');
-//
-//     const responseBody = {
-//       status_list: applicationStatusList
-//     }
-//
-//     response.success(req.requestId, responseBody, res);
-//   } catch (e) {
-//     response.failure(req.requestId, e, res);
-//   }
-// };
-//
+module.exports.getTagStatusList = async (req, res) => {
+  try {
+    logger.requestRest(req, 'getTagStatusList');
+
+    const responseBody = {
+      status_list: tagStatusList
+    }
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};
+
 // module.exports.changeApplicationStatus = async (req, res) => {
 //   try {
 //     logger.requestRest(req, 'changeApplicationStatus');

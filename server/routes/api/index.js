@@ -50,7 +50,7 @@ module.exports = (app) => {
 
   // tag management
   app.post(route.addTag, tags.addTag);
-  // app.get(route.applicationStatusList, tags.getApplicationStatusList);
+  app.get(route.tagStatusList, tags.getTagStatusList);
   // app.put(route.applicationStatusChange, tags.changeApplicationStatus);
   // app.get(route.applicationList, tags.getApplicationList);
   // app.get(route.applicationInfoById, tags.getApplicationInfoById)
