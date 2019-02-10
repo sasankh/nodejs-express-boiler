@@ -31,6 +31,7 @@ const routes = {
   addTag: '/api/tags/add',
   tagStatusList: '/api/tags/status/list',
   tagStatusChange: '/api/tags/status/change',
+  tagInfoById: '/api/tags/info/:id',
 };
 
 module.exports = routes;

@@ -9,15 +9,15 @@ const {
   mysql
 } = require(`${global.__base}/server/utilities`);
 
-// GetApplicationInfoById Modules
-function GetApplicationInfoById(requestId, params) {
+// GetTagInfoById Modules
+function GetTagInfoById(requestId, params) {
   this.requestId = requestId;
   this.params = params;
 }
 
-module.exports = GetApplicationInfoById;
+module.exports = GetTagInfoById;
 
-GetApplicationInfoById.prototype.paramValidation = function () {
+GetTagInfoById.prototype.paramValidation = function () {
   return new Promise((resolve, reject) => {
     try {
       logger.debug(this.requestId, 'paramValidation');
@@ -30,7 +30,7 @@ GetApplicationInfoById.prototype.paramValidation = function () {
         if (err) {
           reject({
             code: 103,
-            custom_message: 'Invalid application id'
+            custom_message: 'Invalid tag id'
           });
         } else {
           this.params = result;
@@ -43,21 +43,22 @@ GetApplicationInfoById.prototype.paramValidation = function () {
   });
 };
 
-GetApplicationInfoById.prototype.getApplicationInfoById = function () {
+GetTagInfoById.prototype.getTagInfoById = function () {
   return new Promise(async (resolve, reject) => {
     try {
-      logger.debug(this.requestId, 'getApplicationInfoById');
+      logger.debug(this.requestId, 'getTagInfoById');
 
       const retrieve_columns = [
-        'a.application_id',
-        'a.application_name',
-        'a.status',
-        'CONVERT(a.description USING utf8) as description',
-        'a.created_at',
-        'a.created_by'
+        't.tag_id',
+        't.tag',
+        't.status',
+        'CONVERT(t.description USING utf8) as description',
+        't.created_at',
+        't.created_by',
+        'a.application_name'
       ];
 
-      const query = `SELECT ${retrieve_columns.join(',')} FROM applications a WHERE a.application_id = ?`
+      const query = `SELECT ${retrieve_columns.join(',')} FROM tags t LEFT JOIN applications a ON t.application_id = a.application_id WHERE t.tag_id = ?`;
       const post = [this.params.id];
 
       const {
@@ -69,13 +70,13 @@ GetApplicationInfoById.prototype.getApplicationInfoById = function () {
       } else if (results.length === 0){
         reject({
           code: 103,
-          custom_message: 'Application not found',
+          custom_message: 'Tag not found',
           level: 'debug'
         });
       } else {
         reject({
           code: 102,
-          message: 'More then one application record found for the id. This should not happen',
+          message: 'More then one tag record found for the id. This should not happen',
           level: 'error'
         });
       }
@@ -85,11 +86,11 @@ GetApplicationInfoById.prototype.getApplicationInfoById = function () {
   });
 };
 
-GetApplicationInfoById.prototype.responseBody = function (applicationInfo) {
+GetTagInfoById.prototype.responseBody = function (tagInfo) {
   return new Promise((resolve) => {
     logger.debug(this.requestId, 'responseBody');
 
-    const responseBody = applicationInfo;
+    const responseBody = tagInfo;
 
     resolve(responseBody);
   });

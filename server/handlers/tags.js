@@ -12,7 +12,7 @@ const {
 const AddTag = require(`${global.__base}/server/modules/tags/addTag`);
 const ChangeTagStatus = require(`${global.__base}/server/modules/tags/changeTagStatus`);
 // const GetApplicationList = require(`${global.__base}/server/modules/tags/getApplicationList`);
-// const GetApplicationInfoById = require(`${global.__base}/server/modules/tags/getApplicationInfoById`);
+const GetTagInfoById = require(`${global.__base}/server/modules/tags/getTagInfoById`);
 
 module.exports.addTag = async (req, res) => {
   try {
@@ -85,19 +85,19 @@ module.exports.changeTagStatus = async (req, res) => {
 //     response.failure(req.requestId, e, res);
 //   }
 // };
-//
-// module.exports.getApplicationInfoById = async (req, res) => {
-//   try {
-//     logger.requestRest(req, 'getApplicationInfoById', req.params);
-//
-//     const getApplicationInfoById = new GetApplicationInfoById(req.requestId, req.params);
-//
-//     await getApplicationInfoById.paramValidation();
-//     const applicationInfo = await getApplicationInfoById.getApplicationInfoById();
-//     const responseBody = await getApplicationInfoById.responseBody(applicationInfo);
-//
-//     response.success(req.requestId, responseBody, res);
-//   } catch (e) {
-//     response.failure(req.requestId, e, res);
-//   }
-// };
+
+module.exports.getTagInfoById = async (req, res) => {
+  try {
+    logger.requestRest(req, 'getTagInfoById', req.params);
+
+    const getTagInfoById = new GetTagInfoById(req.requestId, req.params);
+
+    await getTagInfoById.paramValidation();
+    const tagInfo = await getTagInfoById.getTagInfoById();
+    const responseBody = await getTagInfoById.responseBody(tagInfo);
+
+    response.success(req.requestId, responseBody, res);
+  } catch (e) {
+    response.failure(req.requestId, e, res);
+  }
+};

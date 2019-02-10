@@ -46,14 +46,14 @@ module.exports = (app) => {
   app.get(route.applicationStatusList, applications.getApplicationStatusList);
   app.put(route.applicationStatusChange, applications.changeApplicationStatus);
   app.get(route.applicationList, applications.getApplicationList);
-  app.get(route.applicationInfoById, applications.getApplicationInfoById)
+  app.get(route.applicationInfoById, applications.getApplicationInfoById);
 
   // tag management
   app.post(route.addTag, tags.addTag);
   app.get(route.tagStatusList, tags.getTagStatusList);
   app.put(route.tagStatusChange, tags.changeTagStatus);
   // app.get(route.applicationList, tags.getApplicationList);
-  // app.get(route.applicationInfoById, tags.getApplicationInfoById)
+  app.get(route.tagInfoById, tags.getTagInfoById);
 
   logger.info('SERVICE', 'Routes initialized.');
 };
