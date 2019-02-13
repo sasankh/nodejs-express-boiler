@@ -1,6 +1,5 @@
 'use strict';
 
-const config = require(`${global.__base}/server/config/config`);
 const logger = require(`${global.__base}/server/utilities/modules/utilLogger`);
 
 const errorResponseBody = (requestId, httpCode, message, error) => {
@@ -88,7 +87,7 @@ module.exports.failure = (requestId, error, res) => {
         case 100:
           httpCode = error.http_code || 500;
           message = (error.http_code ? 'Http code supplied' : 'Http code not supplied using default 500');
-          systemMessage = message;
+          const systemMessage = message;
           body = errorResponseBody(requestId, httpCode, message, error);
           if (!error.http_code) {
             body.error.internal.system_message = systemMessage;
@@ -106,4 +105,4 @@ module.exports.failure = (requestId, error, res) => {
   } catch (e) {
     internalError(requestId, e, res);
   }
-}
+};

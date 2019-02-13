@@ -129,12 +129,12 @@ function logReject(requestId, body) {
   if (body) {
     logManager(requestId, body);
   } else {
-    const body = {
+    const newBody = {
       level: 'warn',
       message: `Exception. Reject log without a body. Please, pass reject body to log_reject. RequestId: ${requestId}`
-    }
+    };
 
-    logManager(requestId, body);
+    logManager(requestId, newBody);
   }
 }
 

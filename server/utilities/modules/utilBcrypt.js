@@ -18,13 +18,12 @@ function generateSalt(requestId, saltRounds) {
         resolve(salt);
       }
     });
-
   });
-};
+}
 
 function hash(requestId, salt, textToHash) {
   return new Promise((resolve, reject) => {
-    bcrypt.hash(textToHash, salt, (err, hash) => {
+    bcrypt.hash(textToHash, salt, (err, resultHash) => {
       if (err) {
         logger.error(requestId, 'Problem with bcrypt hashing', err);
 
@@ -33,11 +32,11 @@ function hash(requestId, salt, textToHash) {
           message: 'Problem with bcrypt hashing'
         });
       } else {
-        resolve(hash);
+        resolve(resultHash);
       }
     });
   });
-};
+}
 
 function generateSaltAndHash(requestId, saltRounds, textToHash) {
   return new Promise(async (resolve, reject) => {
@@ -49,16 +48,15 @@ function generateSaltAndHash(requestId, saltRounds, textToHash) {
         salt,
         hash: generatedHash
       });
-
     } catch (e) {
       reject(e);
     }
   });
-};
+}
 
-function compare(requestId, textToCompare, hash) {
+function compare(requestId, textToCompare, hashToCompare) {
   return new Promise((resolve, reject) => {
-    bcrypt.compare(textToCompare, hash, (err, result) => {
+    bcrypt.compare(textToCompare, hashToCompare, (err, result) => {
       if (err) {
         logger.error(requestId, 'Problem with bcrypt compare', err);
 
@@ -71,11 +69,11 @@ function compare(requestId, textToCompare, hash) {
       }
     });
   });
-};
+}
 
 module.exports = {
   generateSalt,
   hash,
   generateSaltAndHash,
   compare
-}
+};
