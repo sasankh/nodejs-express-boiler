@@ -32,7 +32,7 @@ Login.prototype.bodyValidation = function () {
         reject({
           code: 103,
           message: 'Missing required parameter',
-          logLevel: 'debug',
+          level: 'debug',
           details: err
         });
       } else {
@@ -76,7 +76,7 @@ Login.prototype.generateToken = function (userInfo, ip, hostname) {
 
       resolve(token);
     } catch (e) {
-      reject({ code: 102, message: { message: e.message, stack: e.stack } });
+      reject(e);
     }
   });
 };
