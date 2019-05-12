@@ -30,15 +30,15 @@ exports.jwt = {
 // all mysql connections
 exports.mysql = {
   // relace with db name {replaceWithDbName} AND {REPLACE_WITH_DB_NAME} PORTIONS
-  replaceWithDbName: {
-    host: process.env.REPLACE_WITH_DB_NAME_MYSQL_HOST,
-    user: process.env.REPLACE_WITH_DB_NAME_MYSQL_USER,
-    password: process.env.REPLACE_WITH_DB_NAME_MYSQL_PASS,
-    database: process.env.REPLACE_WITH_DB_NAME_MYSQL_DB,
-    port: process.env.REPLACE_WITH_DB_NAME_MYSQL_PORT,
-    connectionLimit: parseInt(process.env.REPLACE_WITH_DB_NAME_MAX_MYSQL_CONNECTION, 10) || 12,
-    waitForConnections: true
-  }
+  // replaceWithDbName: {
+  //   host: process.env.REPLACE_WITH_DB_NAME_MYSQL_HOST,
+  //   user: process.env.REPLACE_WITH_DB_NAME_MYSQL_USER,
+  //   password: process.env.REPLACE_WITH_DB_NAME_MYSQL_PASS,
+  //   database: process.env.REPLACE_WITH_DB_NAME_MYSQL_DB,
+  //   port: process.env.REPLACE_WITH_DB_NAME_MYSQL_PORT,
+  //   connectionLimit: parseInt(process.env.REPLACE_WITH_DB_NAME_MAX_MYSQL_CONNECTION, 10) || 12,
+  //   waitForConnections: true
+  // }
 };
 
 // Credentials, api_key, etc of other services
