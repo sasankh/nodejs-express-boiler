@@ -5,8 +5,7 @@ const logger = require(`${global.__base}/server/utilities/modules/utilLogger`);
 const {
   mysql,
   dbs,
-  dbList,
-  addConnectionTracer
+  dbList
 } = require(`${global.__base}/server/init/mysql`);
 
 function getPool(requestId, dbName) {
@@ -30,11 +29,11 @@ function getConnection(requestId, dbName) {
         if (err) {
           logger.error(requestId, `Mysql-Error. Problem getting db connection - ${dbName}`, err);
           reject({
-            code: 103,
+            code: 102,
             message: `Problem getting db connection - ${dbName}`
           });
         } else {
-          const newConnection = addConnectionTracer(connection);
+          const newConnection = connection;
           resolve(newConnection);
         }
       });
@@ -68,7 +67,7 @@ function beginTransaction(requestId, dbName) {
                 message: `Problem getting mysql transaction connection - ${dbName}`
               });
             } else {
-              const newConnection = addConnectionTracer(connection);
+              const newConnection = connection;
 
               logger.info(requestId, `Beginning mysql transaction - db - ${newConnection.config.database}`);
               resolve(newConnection);
@@ -193,6 +192,5 @@ module.exports = {
   commit,
   rollback,
   query: performQuery,
-  addConnectionTracer,
   escape
 };

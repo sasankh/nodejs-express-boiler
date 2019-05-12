@@ -24,8 +24,7 @@ const {
 const {
   addRequestId,
   parseAccessOrigin,
-  cors,
-  zipkinMiddleware
+  cors
 } = require(`${global.__base}/server/middlewares`);
 
 const apis = require(`${global.__base}/server/routes/api`);
@@ -50,11 +49,6 @@ async function initialize() {
 
     const allowedOrigins = await parseAccessOrigin(config.app.accessOrigins);
     app.use(cors(allowedOrigins));
-    app.use(zipkinMiddleware(
-      config.zipkin.recorderType,
-      config.app.applicationService,
-      config.zipkin.remoteHttp
-    ));
 
     // routes
     apis(app);

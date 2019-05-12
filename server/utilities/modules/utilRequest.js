@@ -25,7 +25,7 @@ module.exports = (requestId, options) => {
         if (err) {
           logger.error(requestId, 'Request-Error. Unable to make request to remote service', err);
           reject({
-            code: 103,
+            code: 102,
             message: 'Unable to make request to remote service'
           });
         } else {
